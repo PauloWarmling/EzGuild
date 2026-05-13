@@ -1,0 +1,25 @@
+# ==========================================
+# Pastas de Build e Configurações Locais
+# ==========================================
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Arquivos de Sistema Operacional
+# ==========================================
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Banco de Dados SQLite (Dados de Teste)
+# ==========================================
+# Ignoramos o banco para não causar conflitos ao usar em outro PC.
+# Quando baixar em casa, você rodará 'Update-Database' para gerar um banco limpo lá.
+*.db
+*.db-shm
+*.db-wal
