@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EzGuild.Migrations
 {
     /// <inheritdoc />
-    public partial class CriacaoInicial : Migration
+    public partial class CriacaoCorrigida : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,11 +71,11 @@ namespace EzGuild.Migrations
                 columns: table => new
                 {
                     MissoesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PersonagemsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PersonagensId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MissaoPersonagem", x => new { x.MissoesId, x.PersonagemsId });
+                    table.PrimaryKey("PK_MissaoPersonagem", x => new { x.MissoesId, x.PersonagensId });
                     table.ForeignKey(
                         name: "FK_MissaoPersonagem_Missoes_MissoesId",
                         column: x => x.MissoesId,
@@ -83,17 +83,17 @@ namespace EzGuild.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MissaoPersonagem_Personagens_PersonagemsId",
-                        column: x => x.PersonagemsId,
+                        name: "FK_MissaoPersonagem_Personagens_PersonagensId",
+                        column: x => x.PersonagensId,
                         principalTable: "Personagens",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MissaoPersonagem_PersonagemsId",
+                name: "IX_MissaoPersonagem_PersonagensId",
                 table: "MissaoPersonagem",
-                column: "PersonagemsId");
+                column: "PersonagensId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Personagens_JogadorId",

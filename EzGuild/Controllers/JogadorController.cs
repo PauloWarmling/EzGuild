@@ -33,7 +33,9 @@ namespace EzGuild.Controllers
         public async Task<ActionResult<IEnumerable<Jogador>>> ListarJogadores()
         {
             // Busca todos os jogadores no banco e transforma em uma lista
-            return await _context.Jogadores.ToListAsync();
+            return await _context.Jogadores
+                .Include(j => j.Personagens)
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]

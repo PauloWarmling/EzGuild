@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzGuild.Migrations
 {
     [DbContext(typeof(EzGuildDbContext))]
-    [Migration("20260513232632_CriacaoInicial")]
-    partial class CriacaoInicial
+    [Migration("20260519192414_CriacaoCorrigida")]
+    partial class CriacaoCorrigida
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,12 +106,12 @@ namespace EzGuild.Migrations
                     b.Property<int>("MissoesId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PersonagemsId")
+                    b.Property<int>("PersonagensId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("MissoesId", "PersonagemsId");
+                    b.HasKey("MissoesId", "PersonagensId");
 
-                    b.HasIndex("PersonagemsId");
+                    b.HasIndex("PersonagensId");
 
                     b.ToTable("MissaoPersonagem");
                 });
@@ -137,7 +137,7 @@ namespace EzGuild.Migrations
 
                     b.HasOne("EzGuild.Models.Personagem", null)
                         .WithMany()
-                        .HasForeignKey("PersonagemsId")
+                        .HasForeignKey("PersonagensId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

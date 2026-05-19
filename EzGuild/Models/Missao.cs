@@ -8,7 +8,7 @@
         public int nivelMinimo { get; set; }
         public string Status { get; set; } = "Disponível";
 
-        public List<Personagem> Personagems { get; set; } = new();
+        public List<Personagem> Personagens { get; set; } = new();
 
     }
 }

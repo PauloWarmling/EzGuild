@@ -103,12 +103,12 @@ namespace EzGuild.Migrations
                     b.Property<int>("MissoesId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PersonagemsId")
+                    b.Property<int>("PersonagensId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("MissoesId", "PersonagemsId");
+                    b.HasKey("MissoesId", "PersonagensId");
 
-                    b.HasIndex("PersonagemsId");
+                    b.HasIndex("PersonagensId");
 
                     b.ToTable("MissaoPersonagem");
                 });
@@ -134,7 +134,7 @@ namespace EzGuild.Migrations
 
                     b.HasOne("EzGuild.Models.Personagem", null)
                         .WithMany()
-                        .HasForeignKey("PersonagemsId")
+                        .HasForeignKey("PersonagensId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
