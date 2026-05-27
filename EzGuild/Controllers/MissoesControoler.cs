@@ -39,7 +39,6 @@ public class MissoesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Missao>>> ListarMissoes()
     {
-        // Adicionamos o .Include para forçar o SQLite a trazer os participantes da quest
         return await _context.Missoes
             .Include(m => m.Personagens)
             .ToListAsync();
@@ -90,29 +89,23 @@ public class MissoesController : ControllerBase
     [HttpPost("{missaoId}/aceitar/{personagemId}")]
     public async Task<IActionResult> AceitarMissao(int missaoId, int personagemId)
     {
-        // 1. Buscamos a missão usando "Personagens" (batendo com seu Model)
         var missao = await _context.Missoes
             .Include(m => m.Personagens) 
             .FirstOrDefaultAsync(m => m.Id == missaoId);
 
-        // 2. Buscamos o herói e guardamos na variável "personagem"
         var personagem = await _context.Personagens.FindAsync(personagemId);
 
-        // Validações de existência
         if (missao == null) return NotFound("Esta missão não existe no quadro.");
         if (personagem == null) return NotFound("Este herói não foi encontrado na guilda.");
 
-        // 3. Verificamos se o ID do herói já está na lista da missão
         if (missao.Personagens.Any(p => p.Id == personagemId))
         {
             return BadRequest("Este herói já aceitou esta missão anteriormente!");
         }
 
-        // 4. Adicionamos o herói à lista e alteramos o status da quest
         missao.Personagens.Add(personagem);
         missao.Status = "Em Andamento";
 
-        // 5. Salvamos as alterações no banco
         await _context.SaveChangesAsync();
 
         return Ok($"Sucesso! O herói {personagem.Nome} aceitou o contrato: '{missao.Titulo}'.");

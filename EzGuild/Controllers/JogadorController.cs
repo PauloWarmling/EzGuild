@@ -16,34 +16,35 @@ namespace EzGuild.Controllers
             _context = context;
         }
 
+        // 1. CREATE: Cria um Jogador
+        // Rota: POST /api/jogador
         [HttpPost]
         public async Task<ActionResult<Jogador>> CriarJogador(Jogador jogador)
         {
-            // Adiciona o jogador na memória do banco
             _context.Jogadores.Add(jogador);
 
-            // Salva de fato no arquivo SQLite
             await _context.SaveChangesAsync();
 
-            // Retorna o código 201 (Criado com sucesso) e mostra os dados salvos
             return CreatedAtAction(nameof(BuscarJogadorPorId), new { id = jogador.Id }, jogador);
         }
 
+        // 2. READ: Busca todos os jogadores
+        // Rota: GET /api/jogador
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Jogador>>> ListarJogadores()
         {
-            // Busca todos os jogadores no banco e transforma em uma lista
             return await _context.Jogadores
                 .Include(j => j.Personagens)
                 .ToListAsync();
         }
 
+        // 3. READ: Busca um jogador pelo jogadorid
+        // Rota: GET /api/jogador/jogadorid
         [HttpGet("{id}")]
         public async Task<ActionResult<Jogador>> BuscarJogadorPorId(int id)
         {
             var jogador = await _context.Jogadores.FindAsync(id);
 
-            // Se não achar ninguém com esse ID, avisa que não encontrou (Erro 404)
             if (jogador == null)
             {
                 return NotFound("Jogador não encontrado na guilda.");
@@ -52,27 +53,28 @@ namespace EzGuild.Controllers
             return jogador;
         }
 
+        // 4. UPDATE: Atualiza os dados do jogador
+        // Rota: PUT /api/jogador/jogadorid
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarJogador(int id, Jogador jogador)
         {
-            // Verifica se o ID passado na URL é o mesmo ID do jogador enviado no corpo (Body)
             if (id != jogador.Id) return BadRequest("Os IDs não coincidem.");
 
-            // Avisa o banco que este jogador foi modificado
             _context.Entry(jogador).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Retorna código 204 (Sucesso, mas sem conteúdo extra para mostrar)
+            return NoContent();
         }
 
+        // 4. DELETE: Remove um jogador pelo id
+        // Rota: DELETE /api/jogador/jogadorid
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletarJogador(int id)
         {
             var jogador = await _context.Jogadores.FindAsync(id);
             if (jogador == null) return NotFound("Jogador não encontrado.");
 
-            // Remove da memória e salva
             _context.Jogadores.Remove(jogador);
             await _context.SaveChangesAsync();
 

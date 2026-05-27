@@ -11,7 +11,6 @@ public class PersonagensController : ControllerBase
 {
     private readonly EzGuildDbContext _context;
 
-    // O Construtor injeta o nosso banco de dados aqui (mesmo nome da classe!)
     public PersonagensController(EzGuildDbContext context)
     {
         _context = context;
@@ -22,7 +21,6 @@ public class PersonagensController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Personagem>> CriarPersonagem(Personagem personagem)
     {
-        // CORRIGIDO: mudado 'personaje' para 'personagem'
         var jogadorExiste = await _context.Jogadores.AnyAsync(j => j.Id == personagem.JogadorId);
         
         if (!jogadorExiste)
@@ -30,11 +28,9 @@ public class PersonagensController : ControllerBase
             return BadRequest("Não é possível criar o personagem. O JogadorId informado não existe.");
         }
 
-        // Adiciona o personagem ao banco
         _context.Personagens.Add(personagem);
         await _context.SaveChangesAsync();
 
-        // CORRIGIDO: mudado 'personaje' para 'personagem'
         return CreatedAtAction(nameof(BuscarPersonagemPorId), new { id = personagem.Id }, personagem);
     }
 
@@ -43,7 +39,6 @@ public class PersonagensController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Personagem>>> ListarPersonagens()
     {
-        // Usamos o .Include para "trazer junto" os dados do Jogador dono do personagem
         return await _context.Personagens
             .Include(p => p.Jogador)
             .ToListAsync();
