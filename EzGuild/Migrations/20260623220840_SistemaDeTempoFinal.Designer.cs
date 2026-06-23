@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzGuild.Migrations
 {
     [DbContext(typeof(EzGuildDbContext))]
-    [Migration("20260519192414_CriacaoCorrigida")]
-    partial class CriacaoCorrigida
+    [Migration("20260623220840_SistemaDeTempoFinal")]
+    partial class SistemaDeTempoFinal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,12 +52,25 @@ namespace EzGuild.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("DataTermino")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PersonagemId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("RecompensaOuro")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TempoSegundosBase")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Titulo")
                         .IsRequired()

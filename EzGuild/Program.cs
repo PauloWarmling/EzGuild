@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LiberarReact", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // URL exata do seu React
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -19,6 +29,8 @@ builder.Services.AddDbContext<EzGuildDbContext>(options =>
     options.UseSqlite("Data Source=ezguild.db"));
 
 var app = builder.Build();
+
+app.UseCors("LiberarReact");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
