@@ -11,18 +11,15 @@ public class MissoesController : ControllerBase
 {
     private readonly EzGuildDbContext _context;
 
-    // O Construtor injeta o banco de dados (mesmo nome da classe!)
     public MissoesController(EzGuildDbContext context)
     {
         _context = context;
     }
 
-    // 1. CREATE: Adiciona uma nova missão ao quadro da taverna
     // Rota: POST /api/missoes
     [HttpPost]
     public async Task<ActionResult<Missao>> CriarMissao(Missao missao)
     {
-        // Força o status inicial para "Disponivel" se vier vazio
         if (string.IsNullOrEmpty(missao.Status))
         {
             missao.Status = "Disponivel";
@@ -34,7 +31,6 @@ public class MissoesController : ControllerBase
         return CreatedAtAction(nameof(BuscarMissaoPorId), new { id = missao.Id }, missao);
     }
 
-    // 2. READ: Lista todas as missões cadastradas
     // Rota: GET /api/missoes
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Missao>>> ListarMissoes()
@@ -44,7 +40,6 @@ public class MissoesController : ControllerBase
             .ToListAsync();
     }
 
-    // 3. READ: Busca os detalhes de uma missão específica pelo ID
     // Rota: GET /api/missoes/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Missao>> BuscarMissaoPorId(int id)
@@ -59,7 +54,6 @@ public class MissoesController : ControllerBase
         return missao;
     }
 
-    // 4. UPDATE: Atualiza os dados de uma missão (ex: mudar o status para "Concluida")
     // Rota: PUT /api/missoes/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> AtualizarMissao(int id, Missao missao)
@@ -94,18 +88,16 @@ public class MissoesController : ControllerBase
         if (missao == null || personagem == null) return NotFound("Alvo não encontrado.");
         if (missao.Status != "Disponivel") return BadRequest("Esta missão não está disponível.");
 
-        // 1. Contar quantos personagens totais existem na guilda para aplicar o bônus
         int totalPersonagens = await _context.Personagens.CountAsync();
 
-        // 2. Calcular a redução (Dividir por 2 para cada personagem cadastrado)
-        // Math.Pow(2, totalPersonagens) calcula 2 elevado ao número de personagens
+
         double divisor = Math.Pow(2, totalPersonagens);
         int tempoReduzidoSegundos = (int)Math.Ceiling(missao.TempoSegundosBase / divisor);
 
-        // Garantir um tempo mínimo de pelo menos 2 segundos para o jogo não quebrar
+
         if (tempoReduzidoSegundos < 2) tempoReduzidoSegundos = 2;
 
-        // 3. Atualizar a missão com o novo tempo dinâmico
+
         missao.Status = "Em Andamento";
         missao.PersonagemId = personagemId;
         missao.DataTermino = DateTime.Now.AddSeconds(tempoReduzidoSegundos);
@@ -126,14 +118,12 @@ public class MissoesController : ControllerBase
 
         if (missao == null) return NotFound("Missão não encontrada.");
 
-        // === DIAGNÓSTICO MELHORADO ===
         if (missao.Status != "Em Andamento")
             return BadRequest($"Esta missão não pode ser finalizada porque o status atual é '{missao.Status}' e deveria ser 'Em Andamento'.");
 
         if (!missao.PersonagemId.HasValue)
             return BadRequest("Esta missão não possui nenhum herói vinculado a ela.");
 
-        // Ajustamos para DateTime.Now (Horário local do seu PC) para bater com o navegador
         if (DateTime.Now < missao.DataTermino)
         {
             var segundosRestantes = (missao.DataTermino.Value - DateTime.Now).TotalSeconds;
@@ -151,7 +141,6 @@ public class MissoesController : ControllerBase
             return BadRequest("O herói faleceu misteriosamente antes de terminar. Status resetado.");
         }
 
-        // APLICAR REGRA DE NEGÓCIO DE SOBREVIVÊNCIA
         if (personagem.Nivel < missao.nivelMinimo)
         {
             _context.Personagens.Remove(personagem);

@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("LiberarReact", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // URL exata do seu React
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

@@ -16,7 +16,6 @@ namespace EzGuild.Controllers
             _context = context;
         }
 
-        // 1. CREATE: Cria um Jogador
         // Rota: POST /api/jogador
         [HttpPost]
         public async Task<ActionResult<Jogador>> CriarJogador(Jogador jogador)
@@ -28,7 +27,6 @@ namespace EzGuild.Controllers
             return CreatedAtAction(nameof(BuscarJogadorPorId), new { id = jogador.Id }, jogador);
         }
 
-        // 2. READ: Busca todos os jogadores
         // Rota: GET /api/jogador
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Jogador>>> ListarJogadores()
@@ -38,7 +36,6 @@ namespace EzGuild.Controllers
                 .ToListAsync();
         }
 
-        // 3. READ: Busca um jogador pelo jogadorid
         // Rota: GET /api/jogador/jogadorid
         [HttpGet("{id}")]
         public async Task<ActionResult<Jogador>> BuscarJogadorPorId(int id)
@@ -53,7 +50,6 @@ namespace EzGuild.Controllers
             return jogador;
         }
 
-        // 4. UPDATE: Atualiza os dados do jogador
         // Rota: PUT /api/jogador/jogadorid
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarJogador(int id, Jogador jogador)
@@ -67,7 +63,6 @@ namespace EzGuild.Controllers
             return NoContent();
         }
 
-        // 4. DELETE: Remove um jogador pelo id
         // Rota: DELETE /api/jogador/jogadorid
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletarJogador(int id)
